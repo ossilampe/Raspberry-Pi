@@ -1,0 +1,38 @@
+sudo apt update
+sudo apt upgrade
+```- - - - - -### Nextcloud installieren:Nun installieren wir Nextcloud auf dem Raspberry Pi:`sudo apt-get install apache2 php5 php5-gd php5-sqlite php5-curl php5-common php5-intl php-pear php-apc php-xml-parser libapache2-mod-php5 curl libcurl3 libcurl3-dev sqlite mysql-server mysql-client php5-mysql phpmyadmin -y`Ihr könnt entweder eine SQLite oder eine MySQL-Datenbank für Nextcloud verwenden. Wenn mehrere Benutzer oder größere Dateien auf dem Pi gehostet werden sollen, solltet ihr MySQL verwenden. Für MySQL und phpmyadmin muss zwei Mal ein **sicheres** Root Passwort vergeben werden.Wie ihr eine Datenbank für Nextcloud in phpmyadmin anlegt zeige ich euch im Abschnitt „[Datenbank für Nextcloud in phpmyadmin anlegen](https://www.canox.net/2016/06/die-eigene-cloud-mit-dem-raspberry-pi-und-nextcloud/#db-pma)“Solltet ihr SQLite statt MySQL verwenden dann könnt ihr MySQL und phpmyadmin mit folgenden Befehlen entfernen:
+
+sudo apt-get purge mysql-server mysql-client php5-mysql phpmyadmin -y
+
+sudo apt-get autoremove --purge -y
+
+sudo apt-get autoclean ```Nun geht es an die Installation von Nextcloud:
+
+cd /var/www/sudo wget https://download.nextcloud.com/server/releases/nextcloud-11.0.1.zipsudo unzip nextcloud-11.0.1.zipsudo rm nextcloud-11.0.1.zip
+````sudo chown -R www-data:www-data /var/www/nextcloud`- - - - - -### Datenbank für Nextcloud in phpmyadmin anlegenWenn ihr MySQL verwenden möchtet, müsst ihr über http://ip-eures-raspberrypi/phpmyadmin eine Datenbank für Nextcloud erstellen.[![](https://www.canox.net/wp-content/uploads/2016/06/phpmyadmin1-800x673.png)](https://www.canox.net/wp-content/uploads/2016/06/phpmyadmin1.png)Gebt den Benutzernamen root und das bei der **Installation von MySQL vergebene Passwort** ein.[![](https://www.canox.net/wp-content/uploads/2016/06/phpmyadmin2-800x673.png)](https://www.canox.net/wp-content/uploads/2016/06/phpmyadmin2.png)Klickt links auf Neu[![](https://www.canox.net/wp-content/uploads/2016/06/phpmyadmin3-800x673.png)](https://www.canox.net/wp-content/uploads/2016/06/phpmyadmin3.png)Gebt als Name für die Datenbank nextcloud ein und klickt auf „**Anlegen**“- - - - - -### DynDNS Domain bei spdyn.deRegistriert euch zuerst bei [spdyn.de](https://www.spdyn.de) und fügt über euer Profil bei Hosts von Benutzer einen IPv4 Host hinzu.[![](https://www.canox.net/wp-content/uploads/2016/06/spdyn1-800x202.png)](https://www.canox.net/wp-content/uploads/2016/06/spdyn1.png)[![](https://www.canox.net/wp-content/uploads/2016/06/spdyn2-800x372.png)](https://www.canox.net/wp-content/uploads/2016/06/spdyn2.png)Gebt bei 1. einen **Hostnamen** ein. Diesen könnt ihr selbst wählen. In diesen Beispiel habe ich **meinrpi als Hostnamen** gewählt. Bei 2. habt ihr einige Domains zur Auswahl. Ihr müsst bei 3. noch ein CAPTCHA bestätigen. Mit einem Klick auf 4. „Host hinzufügen“- - - - - -### spdns Dynamic DNS Update-Client installieren:Nun richten wir den spdns Update Client ein. Der Client sollte auch mit den alternativen Dynamic-DNS Anbietern funktionieren.
+
+cd
+
+wget http://my5cent.spdns.de/wp-content/uploads/2014/12/spdnsUpdater_bin.tar.gz
+
+tar -zxvf spdnsUpdater_bin.tar.gz
+
+sudo mv spdnsu.conf /etc/
+
+sudo mkdir updater
+
+sudo mv spdnsu updater/
+
+sudo chmod u+x updater/spdnsu
+
+sudo chown -R pi:pi /home/pi/updater/
+
+rm spdnsUpdater_bin.tar.gz ```Anschließend müsst ihr mit sudo nano /etc/spdnsu.conf die Datei /etc/spdnsu.conf anpassen. Dort müsst ihr anpassen:
+Host
+Username
+Passwort (falls ihr über die Webseite einen Token generiert habt müsst ihr diesen statt des Passwortes eintragen)
+sudo crontab -eDort einfügen:
+*/10 * * * * /home/pi/updater/spdnsuTesten, ob alles funktioniert:
+./updater/spdnsuEure IP-Adresse findet ihr in der Datei /tmp/spdnsuIP.cnf
+cat /tmp/spdnsuIP.cnfBeispielausgabe:
+currentIP=111.222.333.444- - - - - -
