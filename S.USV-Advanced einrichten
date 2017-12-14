@@ -87,5 +87,23 @@ Deaktivieren der Ladeschaltung
 ./susv -flash <Pfad der HEX Datei>
 Aktualisieren der Firmware
 
+ -chrgon                   Switch charging circuit on
+      -chrgoff                  Switch charging circuit off
+      -vin                      Read input voltage
+      -pwrext                   Read power consumption
+      -pwrbat                   Read battery consumption
+      -capbat                   Read battery capacity
+      -status                   Read S.USV status
+      -timer                    Set shutdown timer
+      -auto                     Set autostart of S.USV Daemon [0|1]
+      -sleep                    Set S.USV Daemon sleep variable [sec]
+      -mail                     Set S.USV Mail notification [0|1]
+      -boot                     Set S.USV timed boot [0|1]
+      -setboot                  Set S.USV boot time [HH:mm:ss]
+      -shutdown                 Set S.USV timed shutdown [0|1]
+      -setshutdown              Set S.USV shutdown time [HH:mm:ss]
+      -chrgpwr                  Set charging current [mA]
+      -chgadd                   Set I2C-Adress [eg. 0x0F]
+      -flash                    Upgrade Firmware
 
 
