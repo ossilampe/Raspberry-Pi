@@ -1,0 +1,50 @@
+Der Raspberry Pi läuft 24/7. Für den 24/7 Betrieb ist es meiner Meinung nach sinnvoll eine S.USV einzusetzen. Ich verwende hierfür die S.USV pi advanced USV in der Revision 1.x.
+
+sudo apt-get install python-smbus i2c-tools -ysudo nano /etc/modules
+```Dort am Ende der Datei eintragen:
+
+i2c-bcm2708 i2c-dev ```Mit Strg + O, Enter und Strg + X speichert ihr die Datei.
+sudo nano /boot/config.txtDort bei folgenden beiden Zeilen die Raute (\#) entfernen:
+
+dtparam=i2c1=on
+dtparam=i2c_arm=on
+```Mit _**Strg**_ + _**O**_, _**Enter**_ und _**Strg + X**_ speichert ihr die Datei.Danach müsst ihr euren Raspberry Pi neustarten:`sudo reboot`Nach dem Reboot:
+
+cd /tmp
+
+wget http://s-usv.de/files/software/susvd-en-1.32-systemd-all.tar.gz
+
+sudo tar -vxzf susvd-en-1.32-systemd-all.tar.gz
+
+sudo dpkg -i susvd-en-1.32-systemd-all.deb
+
+wget http://s-usv.de/files/firmware/susv_fw_132.tar.gz
+
+sudo tar -vxzf susv_fw_132.tar.gz
+
+cd /opt/susvd
+
+./susv -flash /home/pi/susv_fw_132.hex
+
+sudo ./susvd -start ```Der S.USV Daemon ist für die Überwachung und Steuerung der S.USV verantwortlich. Diesen könnt ihr ebenfalls konfigurieren:
+sudo ./susv -timer 60Dieser Befehl legt in Sekunden fest, wie lange das System weiterläuft bevor der File Safe Shutdown durch die S.USV initiiert wird, nachdem die Spannungsversorgung auf Akkubetrieb umgeschaltet hat. Der Standardwert ist 10.
+
+Mit
+sudo ./susv -timer -1Kann die Funktion deaktiviert werden. Dann wird der File Safe Shutdown durch die S.USV initiiert wenn die Akkurestkapazität einen Wert von 10% erreicht.
+
+Die Restkapazität des Akkus könnt ihr mit folgendem Befehl auslesen:
+cd /opt/susvd/ && ./susv -capbatDie Ausgabe sieht dann zum Beispiel so aus:
+
+********************************
+* *
+* Battery capacity: 50.42% *
+* Battery voltage: 3.90V *
+* *
+********************************
+```### Mail-Benachrichtigung aktivieren und einrichten:
+
+cd /opt/susvd sudo ./susv -mail 1
+
+sudo nano /opt/susvd/scripts/mail.py
+
+cd /opt/susvd && sudo ./susvd -restart ```- - - - - -
