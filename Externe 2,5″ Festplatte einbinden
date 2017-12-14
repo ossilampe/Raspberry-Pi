@@ -1,0 +1,13 @@
+Ihr habt die Möglichkeit externe 2,5″ Festplatten in Nextcloud einzubinden. Ich zeige euch dies hier mithilfe des WD PiDrive von WDLabs.
+
+Meldet euch via SSH auf eurem Raspberry Pi:
+sudo nano /boot/config.txtDort am Ende der Datei einfügen:
+max_usb_current=1Mit Strg+O und Strg+X speichert ihr die Datei.
+mkdir /home/pi/usbdriveÜberprüfen ob eure USB-Festplatte erkannt wurde:
+lsblkDort sollte der Name sda bzw. sda1 erscheinen.
+
+Einbinden der Festplatte ins /home/pi/usbdrive:
+sudo mount -t auto /dev/sda1 /home/pi/usbdrive``sudo chown -R www-data:www-data /home/pi/usbdrive``sudo nano /etc/fstabDort einfügen:
+/dev/sda1 /home/pi/usbdrive auto noatime 0 0Meldet euch mit dem Konto des Adminstrators an und geht zu Apps > Nicht aktiviert und aktiviert die App „External storage support„. Um die Festplatte in Nextcloud einzubinden, geht zu Nextcloud > Euer Benutzername > Administration > Externer Speicher.
+
+Gebt dort den gewünschten Ordnernamen ein (in meinem Fall WD PiDrive), stellt den Speicher auf Lokal und gebt bei Konfiguration den Pfad /home/pi/usbdrive ein.
