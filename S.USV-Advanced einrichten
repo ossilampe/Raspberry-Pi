@@ -48,3 +48,44 @@ cd /opt/susvd sudo ./susv -mail 1
 sudo nano /opt/susvd/scripts/mail.py
 
 cd /opt/susvd && sudo ./susvd -restart ```- - - - - -
+
+
+sudo ./susvd -start
+Startet den S.USV Daemon-Service und dessen Konfiguration.
+
+sudo ./susvd -stop
+Stoppt den S.USV Daemon Service.
+
+sudo ./susvd -restart
+Startet den S.USV Daemon Service neu
+
+./susv -status
+S.USV Status auslesen
+
+./susv -vin [0]
+Auslesen der Eingangsspannung
+
+./susv -pwrext [0]
+Auslesen des externen Stromverbrauchs
+
+./susv -pwrbat [0]
+Auslesen des Stromverbrauchs der Batterie
+
+./susv -capbat [0]
+Auslesen der Batterie – Restkapazität
+
+sudo ./susv -chrgpwr <300/500/1000>
+(Bitte verwenden Sie diesen Befehl als Superuser)
+Konfiguriert den Ladestrom für den Akku
+
+./susv -chrgon
+Aktiviert die Ladeschaltung
+
+./susv -chrgoff
+Deaktivieren der Ladeschaltung
+
+./susv -flash <Pfad der HEX Datei>
+Aktualisieren der Firmware
+
+
+
